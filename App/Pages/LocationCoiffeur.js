@@ -1,34 +1,34 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions } from 'react-native';
 
-const ForgotPasswordEmailScreen = ({ navigation }) => {
-  const [email, setEmail] = useState('');
+const LocationCoiffeurScreen = ({ navigation }) => {
+  const [location, setLocation] = useState('');
 
   const handleSend = () => {
     // Handle sending the email for password reset logic here
-    console.log('Email:', email);
+    console.log('Location:', location);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.headerText}>Forgot Password</Text>
+      <Text style={styles.headerText}>Location</Text>
       <Image
         style={styles.icon}
-        source={require('./../Assets/Images/forgetPassword.png')} // Replace with your actual icon path
+        source={require('./../Assets/Images/location.png')} // Replace with your actual icon path
       />
-      <Text style={styles.titleText}>Forgot your password?</Text>
+      <Text style={styles.titleText}>What is your location?</Text>
       <Text style={styles.subText}>
-        Enter your registered email below to receive password reset instruction
+        Find an artist or studio near your location
       </Text>
       <TextInput
         style={styles.input}
-        placeholder="Input email address"
-        keyboardType="email-address"
-        value={email}
-        onChangeText={setEmail}
+        placeholder="Entrer la localisation"
+        keyboardType="default"
+        value={location}
+        onChangeText={setLocation}
       />
       <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-        <Text style={styles.sendButtonText}>Send</Text>
+        <Text style={styles.sendButtonText} onPress={() => navigation.navigate('AddImageCoiffeur')}>Next</Text>
       </TouchableOpacity>
     </View>
   );
@@ -87,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPasswordEmailScreen;
+export default LocationCoiffeurScreen;

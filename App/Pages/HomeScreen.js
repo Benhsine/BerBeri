@@ -1,6 +1,6 @@
 // screens/HomeScreen.js
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 
 const HomeScreen = () => (
   <View style={styles.container}>

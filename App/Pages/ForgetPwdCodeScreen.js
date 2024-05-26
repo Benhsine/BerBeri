@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [code, setCode] = useState(['', '', '', '']);

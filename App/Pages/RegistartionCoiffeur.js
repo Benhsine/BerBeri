@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimens
 import { Button, Icon } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
 
-const RegistrationScreen = ({ navigation }) => {
+const RegistrationCoiffeurScreen = ({ navigation }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -14,7 +14,7 @@ const RegistrationScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.headerText}>Client</Text>
+      <Text style={styles.headerText}>coiffeur</Text>
       
       <Text style={styles.label}>Your name</Text>
       <TextInput
@@ -79,26 +79,7 @@ const RegistrationScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      
-      <Button title="Sign up" buttonStyle={styles.signupButton} onPress={() => {navigation.navigate('HomeScreen')}} />
-
-      <Text style={styles.orText}>Or sign up with</Text>
-      
-      <Button
-        icon={<FontAwesome name="google" size={24} color="red" />}
-        title=" Continue with Google"
-        buttonStyle={styles.googleButton}
-        titleStyle={styles.googleButtonTitle}
-        onPress={() => {}}
-      />
-      
-      <Button
-        icon={<FontAwesome name="facebook" size={24} color="blue" />}
-        title=" Continue with Facebook"
-        buttonStyle={styles.facebookButton}
-        titleStyle={styles.facebookButtonTitle}
-        onPress={() => {}}
-      />
+      <Button title="Next" buttonStyle={styles.signupButton} onPress={() => navigation.navigate('LocationCoiffeur')} />
       
       <Text style={styles.footerText}>
         Already have an account? <Text style={styles.signinText} onPress={() => navigation.navigate('LoginScreen')}>Sign in</Text>
@@ -165,34 +146,6 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     marginTop: 16,
   },
-  orText: {
-    textAlign: 'center',
-    marginVertical: 16,
-    fontSize: 16,
-    color: '#555',
-  },
-  googleButton: {
-    backgroundColor: '#fff',
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
-  },
-  facebookButton: {
-    backgroundColor: '#fff',
-    borderColor: '#ddd',
-    borderWidth: 1,
-    borderRadius: 5,
-    paddingVertical: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
-  },
   footerText: {
     textAlign: 'center',
     marginTop: 16,
@@ -202,16 +155,6 @@ const styles = StyleSheet.create({
   signinText: {
     color: '#007bff',
   },
-  googleButtonTitle: {
-    color: 'red', // Red title color
-    fontSize: 16,
-    marginLeft: 10, // Adjust margin to align title with icon
-  },
-  facebookButtonTitle: {
-    color: 'blue', // Red title color
-    fontSize: 16,
-    marginLeft: 10, // Adjust margin to align title with icon
-  },
 });
 
-export default RegistrationScreen;
+export default RegistrationCoiffeurScreen;

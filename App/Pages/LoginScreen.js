@@ -1,9 +1,22 @@
-import React from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Modal, StyleSheet, Dimensions } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { AntDesign } from '@expo/vector-icons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
-const LoginScreen = () => {
+const Login = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
+
+  const handleRegister = (userType) => {
+    setModalVisible(false);
+    if (userType === 'Client') {
+      navigation.navigate('RegistrationClient');
+    } else {
+      navigation.navigate('RegistrationCoiffeur');
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.imageContainer}>
@@ -14,50 +27,81 @@ const LoginScreen = () => {
       </View>
       
       <View style={styles.formContainer}>
-      <ScrollView showsVerticalScrollIndicator={false} >
-        <Text style={styles.welcomeText}>Welcome To Berberi </Text>
-        <Text style={styles.subtitleText}>Please enter your login information below to access your account</Text>
-        <View style={styles.inputContainer}>
-          <Icon name="mail-outline" size={20} color="#444" style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Username"
-            placeholderTextColor="#444"
-            keyboardType="email-address"
-          />
-        </View>
-        <View style={styles.inputContainer}>
-          <Icon name="lock-closed-outline" size={20} color="#444" style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#444"
-            secureTextEntry
-          />
-        </View>
-        <TouchableOpacity style={styles.forgotPasswordContainer}>
-          <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.loginButtonText}>Login</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.registerContainer}>
-          <Text style={styles.registerText}>Don't have an account? <Text style={styles.registerLink}>Register</Text></Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.googleAuthentification}>
-          <AntDesign name="google" size={24} color="red"/>
-          <Text style={styles.googleButtonText}>continue with Google</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.facebookAuthentification}>
-          <AntDesign name="facebook-square" size={24} color="blue"/>
-          <Text style={styles.facebookButtonText}>continue with Facebook</Text>
-        </TouchableOpacity>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text style={styles.welcomeText}>Welcome To Berberi</Text>
+          <Text style={styles.subtitleText}>Please enter your login information below to access your account</Text>
+          <View style={styles.inputContainer}>
+            <Icon name="mail-outline" size={20} color="#444" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Username"
+              placeholderTextColor="#444"
+              keyboardType="email-address"
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Icon name="lock-closed-outline" size={20} color="#444" style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              placeholderTextColor="#444"
+              secureTextEntry
+            />
+          </View>
+          <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => navigation.navigate('ForgetPwdEmailScreen')}>
+            <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('HomeScreen')}>
+            <Text style={styles.loginButtonText}>Login</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.registerContainer} onPress={() => setModalVisible(true)}>
+            <Text style={styles.registerText}>Don't have an account? <Text style={styles.registerLink}>Register</Text></Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.googleAuthentification}>
+            <AntDesign name="google" size={24} color="red" />
+            <Text style={styles.googleButtonText}>continue with Google</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.facebookAuthentification}>
+            <AntDesign name="facebook-square" size={24} color="blue" />
+            <Text style={styles.facebookButtonText}>continue with Facebook</Text>
+          </TouchableOpacity>
         </ScrollView>
       </View>
-      
+
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Register as:</Text>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => handleRegister('Client')}
+            >
+              <Text style={styles.modalButtonText}>Client</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.modalButton}
+              onPress={() => handleRegister('Coiffeur')}
+            >
+              <Text style={styles.modalButtonText}>Coiffeur</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setModalVisible(false)}
+            >
+              <Text style={styles.closeButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -68,7 +112,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F89F1A',
+    backgroundColor: '#000',
   },
   image: {
     width: '100%',
@@ -121,7 +165,7 @@ const styles = StyleSheet.create({
     color: '#6A6A6A',
   },
   loginButton: {
-    backgroundColor: '#432F87',
+    backgroundColor: '#0066cc',
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 10,
@@ -176,7 +220,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 10,
   },
+  modalContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' },
+  modalView: { width: 300, backgroundColor: 'white', borderRadius: 10, padding: 20, alignItems: 'center' },
+  modalText: { fontSize: 18, marginBottom: 20 },
+  modalButton: { backgroundColor: '#0066cc', padding: 10, borderRadius: 5, marginBottom: 10, width: '100%', alignItems: 'center' },
+  modalButtonText: { color: 'white', fontWeight: 'bold' },
+  closeButton: { backgroundColor: '#ccc', padding: 10, borderRadius: 5, width: '100%', alignItems: 'center' },
+  closeButtonText: { color: 'black', fontWeight: 'bold' },
 });
 
 
-export default LoginScreen;
+export default Login;
