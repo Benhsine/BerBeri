@@ -3,10 +3,18 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Dimensions 
 
 const ForgotPasswordEmailScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
+  const [isSent, setIsSent] = useState(false);
 
   const handleSend = () => {
     // Handle sending the email for password reset logic here
     console.log('Email:', email);
+    setIsSent(true);
+  };
+
+  const handleEnterCode = () => {
+    // Handle navigation to enter code screen or logic
+    console.log('Navigate to enter code screen');
+    navigation.navigate('ForgetPwdCodeScreen');
   };
 
   return (
@@ -28,8 +36,13 @@ const ForgotPasswordEmailScreen = ({ navigation }) => {
         onChangeText={setEmail}
       />
       <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-        <Text style={styles.sendButtonText}>Send</Text>
+        <Text style={styles.sendButtonText}>{isSent ? 'Resend' : 'Send'}</Text>
       </TouchableOpacity>
+      {isSent && (
+        <TouchableOpacity style={styles.enterCodeButton} onPress={handleEnterCode}>
+          <Text style={styles.enterCodeButtonText}>Click to enter code</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -77,13 +90,27 @@ const styles = StyleSheet.create({
   sendButton: {
     backgroundColor: '#007bff',
     borderRadius: 5,
-    paddingVertical: 12,
-    paddingHorizontal: 40,
+    padding: 12,
+    width : '100%',
   },
   sendButtonText: {
-    fontSize: 18,
+    fontSize: 16,
+    fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
+  },
+  enterCodeButton: {
+    marginTop : 10,
+    backgroundColor: '#28a745',
+    padding: 12,
+    borderRadius: 8,
+    width: '100%',
+    alignItems: 'center',
+  },
+  enterCodeButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

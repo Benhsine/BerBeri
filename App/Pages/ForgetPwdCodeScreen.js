@@ -15,6 +15,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const handleSend = () => {
     // Handle the code verification logic here
     console.log('Entered Code:', code.join(''));
+    navigation.navigate('HomeScreen');
   };
 
   return (

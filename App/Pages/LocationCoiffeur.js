@@ -7,6 +7,7 @@ const LocationCoiffeurScreen = ({ navigation }) => {
   const handleSend = () => {
     // Handle sending the email for password reset logic here
     console.log('Location:', location);
+    navigation.navigate('AddImageCoiffeur');
   };
 
   return (
@@ -28,7 +29,7 @@ const LocationCoiffeurScreen = ({ navigation }) => {
         onChangeText={setLocation}
       />
       <TouchableOpacity style={styles.sendButton} onPress={handleSend}>
-        <Text style={styles.sendButtonText} onPress={() => navigation.navigate('AddImageCoiffeur')}>Next</Text>
+        <Text style={styles.sendButtonText} >Next</Text>
       </TouchableOpacity>
     </View>
   );
@@ -52,6 +53,7 @@ const styles = StyleSheet.create({
     width: 100, // Adjust the width and height as needed
     height: 100,
     marginBottom: 20,
+    resizeMode: 'contain',
   },
   titleText: {
     fontSize: 20,
