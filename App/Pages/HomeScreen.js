@@ -3,10 +3,11 @@ import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, StyleSheet,
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FilterModal from './../Components/filter'; // import the FilterModal component
+import { useNavigation } from '@react-navigation/native';
 
-const HomeScreen = ({ navigation }) => {
+const HomeScreen = (/*{ navigation }*/) => {
   const [filterVisible, setFilterVisible] = useState(false);
-
+  const navigation = useNavigation();
   const salons = [
     { id: 1, name: "Alana Barbershop – Haircut massage & Spa", location: "Banguntapan (5 km)", rating: 4.5, image: require('./../Assets/Images/salon1.png') },
     { id: 2, name: "Hercha Barbershop – Haircut & Styling", location: "Jalan Kaliurang (8 km)", rating: 5.0, image: require('./../Assets/Images/salon2.png') },
@@ -66,16 +67,16 @@ const HomeScreen = ({ navigation }) => {
       </ScrollView>
 
       <View style={styles.navigation}>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('HomeScreen')}>
           <Icon name="home-outline" size={28} color="#000" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Map')}>
           <Icon name="location-outline" size={28} color="#888" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Notification')}>
           <Icon name="notifications-outline" size={28} color="#888" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('Profile')}>
           <Icon name="person-outline" size={28} color="#888" />
         </TouchableOpacity>
       </View>

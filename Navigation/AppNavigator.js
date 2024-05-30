@@ -17,6 +17,9 @@ import RegistrationCoiffeurScreen from '../App/Pages/RegistartionCoiffeur';
 import TeamSizeScreen from '../App/Pages/Question2';
 import ServicesScreen from '../App/Pages/Question1';
 import AppointmentScreen from '../App/Pages/ApointmentScreen';
+import MapScreen from '../App/Pages/Map';
+import ProfileScreen from '../App/Pages/Profile';
+import NotificationScreen from '../App/Pages/Notification';
 
 const Stack = createStackNavigator();
 
@@ -63,6 +66,9 @@ const AppNavigator = () => {
         <Stack.Screen name="Question2" component={TeamSizeScreen} />
         <Stack.Screen name="RegistrationCoiffeur" component={RegistrationCoiffeurScreen} />
         <Stack.Screen name="Appointment" component={AppointmentScreen} />
+        <Stack.Screen name="Map" component={MapScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="Notification" component={NotificationScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import CheckBox from '@react-native-community/checkbox';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import CheckBox from 'expo-checkbox';
+import { useNavigation } from '@react-navigation/native';
 
-const ServicesScreen = ({ navigation }) => {
+const ServicesScreen = () => {
+  const navigation = useNavigation();
   const [services, setServices] = useState({
     hairExtensions: false,
     haircutsStyling: false,
@@ -15,7 +17,7 @@ const ServicesScreen = ({ navigation }) => {
     const selectedServices = Object.keys(services).filter(service => services[service]);
     console.log('Selected Services:', selectedServices);
     // Navigate to the next screen or perform another action
-    navigation.navigate('Question2'); // Replace 'NextScreen' with your actual next screen
+    navigation.navigate('Question2'); // Replace 'Question2' with your actual next screen
   };
 
   return (

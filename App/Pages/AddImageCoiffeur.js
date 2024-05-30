@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, Dimensions} from 'react-native';
 import { launchImageLibrary } from 'react-native-image-picker';
-
-const ProfileImageScreen = ({ navigation }) => {
+import { useNavigation } from '@react-navigation/native';
+const ProfileImageScreen = (/*{ navigation }*/) => {
   const [photo, setPhoto] = useState(null);
-
+  const navigation = useNavigation();
   const handleAddPhoto = () => {
     launchImageLibrary({}, (response) => {
       if (response.didCancel) {

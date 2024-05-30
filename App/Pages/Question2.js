@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-const TeamSizeScreen = ({ navigation }) => {
+const TeamSizeScreen = () => {
   const [selectedOption, setSelectedOption] = useState('');
-
+  const navigation = useNavigation();
+  
   const handleFinish = () => {
     console.log('Selected Team Size:', selectedOption);
-    // Navigate to the next screen or perform another action
-    navigation.navigate('NextScreen'); // Replace 'NextScreen' with your actual next screen
+    navigation.navigate('LoginScreen'); // Replace 'NextScreen' with your actual next screen
   };
 
   const options = [
