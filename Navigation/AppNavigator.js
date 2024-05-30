@@ -16,6 +16,7 @@ import LocationCoiffeurScreen from '../App/Pages/LocationCoiffeur';
 import RegistrationCoiffeurScreen from '../App/Pages/RegistartionCoiffeur';
 import TeamSizeScreen from '../App/Pages/Question2';
 import ServicesScreen from '../App/Pages/Question1';
+import AppointmentScreen from '../App/Pages/ApointmentScreen';
 
 const Stack = createStackNavigator();
 
@@ -61,6 +62,7 @@ const AppNavigator = () => {
         <Stack.Screen name="Question1" component={ServicesScreen} />
         <Stack.Screen name="Question2" component={TeamSizeScreen} />
         <Stack.Screen name="RegistrationCoiffeur" component={RegistrationCoiffeurScreen} />
+        <Stack.Screen name="Appointment" component={AppointmentScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
