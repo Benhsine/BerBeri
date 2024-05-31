@@ -23,6 +23,7 @@ import NotificationScreen from '../App/Pages/Notification';
 import PaymentMethodScreen from '../App/Pages/PaymentMethodScreen';
 import PaymentProcessingScreen from '../App/Pages/PaymentProcessingScreen';
 import CardInfoScreen from '../App/Pages/CardInfosScreen';
+import BarberDetailScreen from '../App/Pages/BarberDetailScreen';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +76,7 @@ const AppNavigator = () => {
         <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
         <Stack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
         <Stack.Screen name="CardInfoScreen" component={CardInfoScreen} />
+        <Stack.Screen name="BarberDetailScreen" component={BarberDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

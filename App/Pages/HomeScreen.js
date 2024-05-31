@@ -52,7 +52,7 @@ const HomeScreen = (/*{ navigation }*/) => {
         <Text style={styles.sectionTitle}>Nearest Barbershop</Text>
         
         {salons.map(salon => (
-          <TouchableOpacity key={salon.id} style={styles.salonCard} onPress={() => navigation.navigate('Appointment')}>
+          <TouchableOpacity key={salon.id} style={styles.salonCard} onPress={() => navigation.navigate('BarberDetailScreen')}>
             <Image source={salon.image} style={styles.salonImage} />
             <View style={styles.salonInfo}>
               <Text style={styles.salonName}>{salon.name}</Text>

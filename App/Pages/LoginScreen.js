@@ -169,6 +169,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 40,
     borderRadius: 10,
+    alignItems: 'center',
     marginBottom: 20,
   },
   loginButtonText: {
