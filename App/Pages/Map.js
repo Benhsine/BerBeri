@@ -1,13 +1,69 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions, Platform } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
+import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
+import { getBarbershops } from './../Api/Api'; // Suppose you have an API function to get barbershops
 
 const MapScreen = () => {
-  
-    const navigation = useNavigation();
+  const navigation = useNavigation();
+  const [region, setRegion] = useState(null);
+  const [barbershops, setBarbershops] = useState([]);
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        console.log('Permission to access location was denied');
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({});
+      setRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+      fetchBarbershops(location.coords.latitude, location.coords.longitude);
+    };
+
+    requestLocationPermission();
+  }, []);
+
+  const fetchBarbershops = async (latitude, longitude) => {
+    try {
+      const data = await getBarbershops(latitude, longitude);
+      setBarbershops(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (!region) {
+    return (
+      <View style={styles.loadingContainer}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
+      <MapView style={styles.map} region={region} showsUserLocation>
+        {barbershops.map((barbershop) => (
+          <Marker
+            key={barbershop.id}
+            coordinate={{
+              latitude: barbershop.latitude,
+              longitude: barbershop.longitude,
+            }}
+            title={barbershop.name}
+            description={barbershop.address}
+          />
+        ))}
+      </MapView>
       <View style={styles.navigation}>
         <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('HomeScreen')}>
           <Icon name="home-outline" size={28} color="#888" />
@@ -44,6 +100,14 @@ const styles = StyleSheet.create({
     borderTopColor: '#eee',
   },
   navItem: {
+    alignItems: 'center',
+  },
+  map: {
+    flex: 1,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center',
   },
 });
