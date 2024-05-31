@@ -45,7 +45,7 @@ const AppointmentScreen = () => {
         )}
       </View>
 
-      <TouchableOpacity style={styles.bookButton}>
+      <TouchableOpacity style={styles.bookButton} onPress={() => navigation.navigate('PaymentMethod')}>
         <Text style={styles.bookButtonText}>Choose Payment Method</Text>
       </TouchableOpacity>
     </ScrollView>

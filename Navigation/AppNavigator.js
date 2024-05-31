@@ -20,6 +20,9 @@ import AppointmentScreen from '../App/Pages/ApointmentScreen';
 import MapScreen from '../App/Pages/Map';
 import ProfileScreen from '../App/Pages/Profile';
 import NotificationScreen from '../App/Pages/Notification';
+import PaymentMethodScreen from '../App/Pages/PaymentMethodScreen';
+import PaymentProcessingScreen from '../App/Pages/PaymentProcessingScreen';
+import CardInfoScreen from '../App/Pages/CardInfosScreen';
 
 const Stack = createStackNavigator();
 
@@ -69,6 +72,9 @@ const AppNavigator = () => {
         <Stack.Screen name="Map" component={MapScreen} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Notification" component={NotificationScreen} />
+        <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
+        <Stack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
+        <Stack.Screen name="CardInfoScreen" component={CardInfoScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
