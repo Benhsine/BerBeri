@@ -1,8 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const FilterModal = ({ visible, onClose }) => {
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const handleStarPress = (rating) => {
+    setSelectedRating(rating);
+  };
+
+  const handleCategoryPress = (category) => {
+    setSelectedCategories(prevSelectedCategories =>
+      prevSelectedCategories.includes(category)
+        ? prevSelectedCategories.filter(item => item !== category)
+        : [...prevSelectedCategories, category]
+    );
+  };
+
   return (
     <Modal
       transparent={true}
@@ -23,7 +38,14 @@ const FilterModal = ({ visible, onClose }) => {
             <Text style={styles.sectionTitle}>General Category</Text>
             <View style={styles.categoryContainer}>
               {['Basic haircut', 'Coloring', 'Treatment', 'Massage', 'Kids haircut'].map(category => (
-                <TouchableOpacity key={category} style={styles.categoryButton}>
+                <TouchableOpacity
+                  key={category}
+                  style={[
+                    styles.categoryButton,
+                    selectedCategories.includes(category) && styles.categoryButtonSelected
+                  ]}
+                  onPress={() => handleCategoryPress(category)}
+                >
                   <Text style={styles.categoryText}>{category}</Text>
                 </TouchableOpacity>
               ))}
@@ -34,9 +56,15 @@ const FilterModal = ({ visible, onClose }) => {
             <Text style={styles.sectionTitle}>Rating Barber</Text>
             <View style={styles.ratingContainer}>
               {Array.from({ length: 5 }).map((_, index) => (
-                <FontAwesome key={index} name="star" size={24} color={index < 4 ? "#FFD700" : "#ddd"} />
+                <TouchableOpacity key={index} onPress={() => handleStarPress(index + 1)}>
+                  <FontAwesome
+                    name="star"
+                    size={24}
+                    color={index < selectedRating ? "#FFD700" : "#ddd"}
+                  />
+                </TouchableOpacity>
               ))}
-              <Text style={styles.ratingText}>(4.0)</Text>
+              <Text style={styles.ratingText}>({selectedRating}.0)</Text>
             </View>
           </View>
 
@@ -99,6 +127,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     margin: 4,
+    borderWidth: 1,
+    borderColor: '#f0f0f0',
+  },
+  categoryButtonSelected: {
+    borderColor: '#333',
   },
   categoryText: {
     fontSize: 14,

@@ -99,7 +99,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginVertical: 16,
+    marginVertical: 15,
+    marginBottom: 50,
   },
   bookButtonText: {
     color: '#fff',
