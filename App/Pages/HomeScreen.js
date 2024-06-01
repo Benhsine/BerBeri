@@ -22,10 +22,13 @@ const HomeScreen = (/*{ navigation }*/) => {
             <Icon name="location-outline" size={20} color="#444" />
             <Text style={styles.locationText}>Rabat</Text>
           </View>
+          <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
           <Image
             source={require('./../Assets/Images/user-profile.jpg')}
             style={styles.profileImage}
           />
+          </TouchableOpacity>
+          
         </View>
         
         <Text style={styles.userName}>Yassine Benhsine</Text>
