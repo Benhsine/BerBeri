@@ -1,12 +1,41 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Modal, StyleSheet, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, ScrollView, Modal, StyleSheet, Dimensions, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const navigation = useNavigation();
+
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post('http://172.16.0.219:8080/api/v1/auth/authenticate', {
+        email,
+        password
+      });
+      
+      const token = response.data.token;
+      await AsyncStorage.setItem('userToken', token);
+  
+      // Refresh AsyncStorage to ensure the latest token is retrieved
+      const refreshedToken = await AsyncStorage.getItem('userToken');
+  
+      if (refreshedToken) {
+        navigation.navigate('HomeScreen');
+      } else {
+        // Handle case where token is not found after setting
+        Alert.alert('Login Failed', 'Unable to retrieve user token. Please try again.');
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Login Failed', 'Invalid email or password. Please try again.');
+    }
+  };
 
   const handleRegister = (userType) => {
     setModalVisible(false);
@@ -25,7 +54,7 @@ const Login = () => {
           style={styles.image}
         />
       </View>
-      
+
       <View style={styles.formContainer}>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.welcomeText}>Welcome To Berberi</Text>
@@ -34,9 +63,11 @@ const Login = () => {
             <Icon name="mail-outline" size={20} color="#444" style={styles.icon} />
             <TextInput
               style={styles.input}
-              placeholder="Username"
+              placeholder="Email"
               placeholderTextColor="#444"
               keyboardType="email-address"
+              value={email}
+              onChangeText={setEmail}
             />
           </View>
           <View style={styles.inputContainer}>
@@ -46,12 +77,14 @@ const Login = () => {
               placeholder="Password"
               placeholderTextColor="#444"
               secureTextEntry
+              value={password}
+              onChangeText={setPassword}
             />
           </View>
           <TouchableOpacity style={styles.forgotPasswordContainer} onPress={() => navigation.navigate('ForgetPwdEmailScreen')}>
             <Text style={styles.forgotPasswordText}>Forgot password?</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.loginButton} onPress={() => navigation.navigate('HomeScreen')}>
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
             <Text style={styles.loginButtonText}>Login</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.registerContainer} onPress={() => setModalVisible(true)}>
@@ -101,6 +134,8 @@ const Login = () => {
     </View>
   );
 };
+
+
 
 
 const styles = StyleSheet.create({

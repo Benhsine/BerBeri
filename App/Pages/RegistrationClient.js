@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const RegistrationScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -12,10 +14,34 @@ const RegistrationScreen = ({ navigation }) => {
   const [isPasswordHidden, setIsPasswordHidden] = useState(true);
   const [isConfirmPasswordHidden, setIsConfirmPasswordHidden] = useState(true);
 
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      Alert.alert('Passwords do not match');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://172.16.0.219:8080/api/v1/auth/register', {
+        fullName: name,
+        email: email,
+        phoneNumber: phone,
+        password: password
+      });
+
+      const token = response.data.token;
+      await AsyncStorage.setItem('userToken', token);
+
+      navigation.navigate('LoginScreen');
+    } catch (error) {
+      console.error(error.response ? error.response.data : error.message);
+      Alert.alert('Registration failed', error.response ? error.response.data.message : 'Please try again');
+    }
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.headerText}>Client</Text>
-      
+
       <Text style={styles.label}>Your name</Text>
       <TextInput
         style={styles.input}
@@ -23,7 +49,7 @@ const RegistrationScreen = ({ navigation }) => {
         value={name}
         onChangeText={setName}
       />
-      
+
       <Text style={styles.label}>Email address</Text>
       <TextInput
         style={styles.input}
@@ -31,7 +57,7 @@ const RegistrationScreen = ({ navigation }) => {
         value={email}
         onChangeText={setEmail}
       />
-      
+
       <Text style={styles.label}>Phone number</Text>
       <View style={styles.phoneContainer}>
         <Text style={styles.phoneCode}>+212</Text>
@@ -43,7 +69,7 @@ const RegistrationScreen = ({ navigation }) => {
         />
         <Icon name="check" type="font-awesome" color="#ccc" />
       </View>
-      
+
       <Text style={styles.label}>Password</Text>
       <View style={styles.passwordContainer}>
         <TextInput
@@ -61,7 +87,7 @@ const RegistrationScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      
+
       <Text style={styles.label}>Confirm Password</Text>
       <View style={styles.passwordContainer}>
         <TextInput
@@ -79,11 +105,11 @@ const RegistrationScreen = ({ navigation }) => {
           />
         </TouchableOpacity>
       </View>
-      
-      <Button title="Sign up" buttonStyle={styles.signupButton} onPress={() => {navigation.navigate('HomeScreen')}} />
+
+      <Button title="Sign up" buttonStyle={styles.signupButton} onPress={handleRegister} />
 
       <Text style={styles.orText}>Or sign up with</Text>
-      
+
       <Button
         icon={<FontAwesome name="google" size={24} color="red" />}
         title=" Continue with Google"
@@ -91,7 +117,7 @@ const RegistrationScreen = ({ navigation }) => {
         titleStyle={styles.googleButtonTitle}
         onPress={() => {}}
       />
-      
+
       <Button
         icon={<FontAwesome name="facebook" size={24} color="blue" />}
         title=" Continue with Facebook"
@@ -99,7 +125,7 @@ const RegistrationScreen = ({ navigation }) => {
         titleStyle={styles.facebookButtonTitle}
         onPress={() => {}}
       />
-      
+
       <Text style={styles.footerText}>
         Already have an account? <Text style={styles.signinText} onPress={() => navigation.navigate('LoginScreen')}>Sign in</Text>
       </Text>

@@ -1,6 +1,4 @@
-// navigation/AppNavigator.js
 import React, { useState, useEffect } from 'react';
-import { Dimensions } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -29,54 +27,61 @@ const Stack = createStackNavigator();
 
 const AppNavigator = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [hasSeenOnboarding, setHasSeenOnboarding] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticationChecked, setIsAuthenticationChecked] = useState(false);
 
   useEffect(() => {
-    const checkOnboarding = async () => {
+    const checkAuthentication = async () => {
       try {
-        const value = await AsyncStorage.getItem('hasSeenOnboarding');
-        if (value !== null) {
-          setHasSeenOnboarding(true);
+        const token = await AsyncStorage.getItem('userToken');
+        if (token) {
+          setIsAuthenticated(true);
         }
       } catch (e) {
         console.error(e);
       } finally {
+        setIsAuthenticationChecked(true);
         setIsLoading(false);
       }
     };
 
-    checkOnboarding();
+    checkAuthentication();
   }, []);
 
-  if (isLoading) {
+  if (!isAuthenticationChecked || isLoading) {
     return <LoadingScreen />;
   }
-
   return (
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        {hasSeenOnboarding ? (
-          <Stack.Screen name="LoginScreen" component={Login} />
+        {isAuthenticated ? (
+          <>
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} />
+            <Stack.Screen name="Map" component={MapScreen} />
+            <Stack.Screen name="Notification" component={NotificationScreen} />
+            <Stack.Screen name="LocationCoiffeur" component={LocationCoiffeurScreen} />
+            <Stack.Screen name="Appointment" component={AppointmentScreen} />
+            <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
+            <Stack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
+            <Stack.Screen name="CardInfoScreen" component={CardInfoScreen} />
+            <Stack.Screen name="BarberDetailScreen" component={BarberDetailScreen} />
+            {/* Add other authenticated screens here */}
+          </>
         ) : (
-          <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+          <>
+            <Stack.Screen name="Onboarding" component={OnboardingScreen} />
+            <Stack.Screen name="LoginScreen" component={Login} />
+            <Stack.Screen name="RegistrationClient" component={RegistrationClientScreen} />
+            <Stack.Screen name="AddImageCoiffeur" component={ProfileImageScreen} />
+            <Stack.Screen name="ForgetPwdEmailScreen" component={ForgotPasswordEmailScreen} />
+            <Stack.Screen name="ForgetPwdCodeScreen" component={ForgotPasswordScreen} />
+            <Stack.Screen name="RegistrationCoiffeur" component={RegistrationCoiffeurScreen} />
+            <Stack.Screen name="Question1" component={ServicesScreen} />
+            <Stack.Screen name="Question2" component={TeamSizeScreen} />
+            {/* Add other non-authenticated screens here */}
+          </>
         )}
-        <Stack.Screen name="RegistrationClient" component={RegistrationClientScreen} />
-        <Stack.Screen name="AddImageCoiffeur" component={ProfileImageScreen} />
-        <Stack.Screen name="ForgetPwdEmailScreen" component={ForgotPasswordEmailScreen} />
-        <Stack.Screen name="ForgetPwdCodeScreen" component={ForgotPasswordScreen} />
-        <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        <Stack.Screen name="LocationCoiffeur" component={LocationCoiffeurScreen} />
-        <Stack.Screen name="Question1" component={ServicesScreen} />
-        <Stack.Screen name="Question2" component={TeamSizeScreen} />
-        <Stack.Screen name="RegistrationCoiffeur" component={RegistrationCoiffeurScreen} />
-        <Stack.Screen name="Appointment" component={AppointmentScreen} />
-        <Stack.Screen name="Map" component={MapScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
-        <Stack.Screen name="Notification" component={NotificationScreen} />
-        <Stack.Screen name="PaymentMethod" component={PaymentMethodScreen} />
-        <Stack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
-        <Stack.Screen name="CardInfoScreen" component={CardInfoScreen} />
-        <Stack.Screen name="BarberDetailScreen" component={BarberDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

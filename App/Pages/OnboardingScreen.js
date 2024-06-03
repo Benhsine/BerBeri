@@ -83,13 +83,13 @@ const styles = StyleSheet.create({
       fontSize: 28,
       color: 'white',
       textAlign: 'center',
-      marginBottom: 40,
+      marginBottom: 60,
     },
     buttonContainer: {
       flexDirection: 'row',
       justifyContent: 'space-between',
       width: '80%',
-      marginBottom: 40,
+      marginBottom: 90,
     },
     button: {
       backgroundColor: 'white',
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
       color: 'blue',
-      fontSize: 18,
+      fontSize: 20,
     },
     pagination: {
       flexDirection: 'row',

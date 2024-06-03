@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, StyleSheet, Dimensions } from 'react-native';
+// App/Pages/HomeScreen.js
+import React, { useState, useEffect } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FilterModal from './../Components/filter'; // import the FilterModal component
+import FilterModal from './../Components/filter';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const HomeScreen = (/*{ navigation }*/) => {
+const HomeScreen = () => {
   const [filterVisible, setFilterVisible] = useState(false);
+  const [user, setUser] = useState(null);
   const navigation = useNavigation();
   const salons = [
     { id: 1, name: "Alana Barbershop – Haircut massage & Spa", location: "Banguntapan (5 km)", rating: 4.5, image: require('./../Assets/Images/salon1.png') },
@@ -14,25 +18,52 @@ const HomeScreen = (/*{ navigation }*/) => {
     { id: 3, name: "Barberking – Haircut styling & massage", location: "Jogja Expo Centre (12 km)", rating: 4.5, image: require('./../Assets/Images/salon3.png') },
   ];
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        try {
+          const response = await axios.get('http://172.16.0.219:8080/api/v1/profile', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          setUser(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
           <View style={styles.locationContainer}>
             <Icon name="location-outline" size={20} color="#444" />
-            <Text style={styles.locationText}>Rabat</Text>
+            <Text style={styles.locationText}>{user.location || 'Unknown Location'}</Text>
           </View>
           <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
-          <Image
-            source={require('./../Assets/Images/user-profile.jpg')}
-            style={styles.profileImage}
-          />
+            <Image
+              source={user.profilePicture ? { uri: user.profilePicture } : require('./../Assets/Images/user-profile.jpg')}
+              style={styles.profileImage}
+            />
           </TouchableOpacity>
-          
         </View>
-        
-        <Text style={styles.userName}>Yassine Benhsine</Text>
-        
+
+        <Text style={styles.userName}>{user.fullName}</Text>
+
         <TouchableOpacity style={styles.banner}>
           <Image
             source={require('./../Assets/Images/background2.jpg')}
@@ -53,7 +84,7 @@ const HomeScreen = (/*{ navigation }*/) => {
         </View>
 
         <Text style={styles.sectionTitle}>Nearest Barbershop</Text>
-        
+
         {salons.map(salon => (
           <TouchableOpacity key={salon.id} style={styles.salonCard} onPress={() => navigation.navigate('BarberDetailScreen')}>
             <Image source={salon.image} style={styles.salonImage} />
@@ -88,7 +119,6 @@ const HomeScreen = (/*{ navigation }*/) => {
     </View>
   );
 };
-const { height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
