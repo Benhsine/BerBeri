@@ -13,6 +13,7 @@ import ForgotPasswordScreen from '../App/Pages/ForgetPwdCodeScreen';
 import LocationCoiffeurScreen from '../App/Pages/LocationCoiffeur';
 import RegistrationCoiffeurScreen from '../App/Pages/RegistartionCoiffeur';
 import TeamSizeScreen from '../App/Pages/Question2';
+import EditProfileScreen from '../App/Pages/EditProfileScreen';
 import ServicesScreen from '../App/Pages/Question1';
 import AppointmentScreen from '../App/Pages/ApointmentScreen';
 import MapScreen from '../App/Pages/Map';
@@ -22,6 +23,11 @@ import PaymentMethodScreen from '../App/Pages/PaymentMethodScreen';
 import PaymentProcessingScreen from '../App/Pages/PaymentProcessingScreen';
 import CardInfoScreen from '../App/Pages/CardInfosScreen';
 import BarberDetailScreen from '../App/Pages/BarberDetailScreen';
+import ThemeScreen from '../App/Pages/ThemeScreen';
+import HelpSupportScreen from '../App/Pages/HelpSupportScreen';
+import ContactUsScreen from '../App/Pages/ContactUsScreen';
+import PrivacyPolicyScreen from '../App/Pages/PrivacyPolicyScreen';
+import LanguageScreen from '../App/Pages/LanguageScreen'; 
 
 const Stack = createStackNavigator();
 
@@ -66,7 +72,13 @@ const AppNavigator = () => {
             <Stack.Screen name="PaymentProcessing" component={PaymentProcessingScreen} />
             <Stack.Screen name="CardInfoScreen" component={CardInfoScreen} />
             <Stack.Screen name="BarberDetailScreen" component={BarberDetailScreen} />
-            {/* Add other authenticated screens here */}
+           <Stack.Screen name="Theme" component={ThemeScreen} />
+          <Stack.Screen name="HelpSupport" component={HelpSupportScreen} />
+             <Stack.Screen name="ContactUs" component={ContactUsScreen} />
+        <Stack.Screen name="EditProfile" component={EditProfileScreen} />
+        <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicyScreen} />
+        <Stack.Screen name="Language" component={LanguageScreen} />
+           
           </>
         ) : (
           <>

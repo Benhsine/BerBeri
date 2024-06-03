@@ -14,23 +14,15 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.post('http://172.16.0.219:8080/api/v1/auth/authenticate', {
+      const response = await axios.post('http://192.168.137.232:8080/api/v1/auth/authenticate', {
         email,
         password
       });
       
       const token = response.data.token;
       await AsyncStorage.setItem('userToken', token);
-  
-      // Refresh AsyncStorage to ensure the latest token is retrieved
-      const refreshedToken = await AsyncStorage.getItem('userToken');
-  
-      if (refreshedToken) {
-        navigation.navigate('HomeScreen');
-      } else {
-        // Handle case where token is not found after setting
-        Alert.alert('Login Failed', 'Unable to retrieve user token. Please try again.');
-      }
+
+      navigation.navigate('HomeScreen');
     } catch (error) {
       console.error(error);
       Alert.alert('Login Failed', 'Invalid email or password. Please try again.');
