@@ -14,16 +14,13 @@ const ProfileScreen = ({ navigation }) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-      <View style={styles.profileHeader}>
-        <Image source={require('../Assets/Images/profile_picture.png')} style={styles.profilePicture} />
-        <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate('EditProfile')}>
-          <Text style={{ color: 'white' }}>Edit Profile</Text>
-        </TouchableOpacity>
-      </View>
-        <Text style={styles.name}>John Daniel</Text>
-        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
-          <Text style={styles.editButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
+        <View style={styles.profileHeader}>
+          <Image source={require('../assets/profile_picture.png')} style={styles.profilePicture} />
+          <Text style={styles.profileName}>John Daniel</Text>
+          <TouchableOpacity style={styles.editProfileButton} onPress={handleEditProfile}>
+            <Text style={{ color: 'white' }}>Edit Profile</Text>
+          </TouchableOpacity>
+        </View>
       </View>
       <View style={styles.tabs}>
         <TouchableOpacity style={styles.tab}>
@@ -83,44 +80,45 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e6e6e6',
   },
-  avatar: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+  profileHeader: {
+    alignItems: 'center',
   },
-  name: {
+  profilePicture: {
+    height: 100,
+    width: 200,
+    borderRadius: 50, // Adjust the borderRadius to make it circular
+  },
+  profileName: {
     fontSize: 22,
     fontWeight: 'bold',
     marginVertical: 10,
   },
-  editButton: {
+  editProfileButton: {
     backgroundColor: '#007bff',
-    paddingVertical: 6,
+    paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 5,
-  },
-  editButtonText: {
-    color: '#fff',
-    fontSize: 16,
   },
   tabs: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 10,
+    marginVerticalmarginVertical: 20,
   },
   tab: {
     marginHorizontal: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: '#007bff',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   tabText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#007bff',
   },
   body: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
   },
-  
   item: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -128,14 +126,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e6e6e6',
   },
-  profilePicture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-  },
   itemText: {
-    marginLeft: 10,
-    fontSize: 18,
+    marginLeft: 15,
+    fontSize: 16,
   },
 });
 
