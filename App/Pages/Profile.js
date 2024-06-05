@@ -1,8 +1,35 @@
-import React from 'react';
+// App/Pages/ProfileScreen.js
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const ProfileScreen = ({ navigation }) => {
+const ProfileScreen = () => {
+  const [user, setUser] = useState(null);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        try {
+          const response = await axios.get('http://192.168.137.232:8080/api/v1/profile', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          setUser(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   const handleEditProfile = () => {
     navigation.navigate('EditProfile');
   };
@@ -11,16 +38,26 @@ const ProfileScreen = ({ navigation }) => {
     navigation.navigate(screen);
   };
 
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading...</Text>
+      </View>
+    );
+  }
+
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-      <View style={styles.profileHeader}>
-        <Image source={require('../Assets/Images/profile_picture.png')} style={styles.profilePicture} />
-        <TouchableOpacity style={styles.editProfileButton} onPress={() => navigation.navigate('EditProfile')}>
-          <Text style={{ color: 'white' }}>Edit Profile</Text>
-        </TouchableOpacity>
-      </View>
-        <Text style={styles.name}>John Daniel</Text>
+        <View style={styles.profileHeader}>
+          <Image
+            source={user.profilePicture ? { uri: user.profilePicture } : require('../Assets/Images/user-profile.jpg')}
+            style={styles.profilePicture}
+          />
+          
+        </View>
+        <Text style={styles.name}>{user.fullName}</Text>
         <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
           <Text style={styles.editButtonText}>Edit Profile</Text>
         </TouchableOpacity>
@@ -44,7 +81,7 @@ const ProfileScreen = ({ navigation }) => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.item} onPress={() => handleNavigation('Language')}>
           <Ionicons name="language-outline" size={24} color="black" />
-          <Text style={styles.itemText}>Language: English</Text>
+          <Text style={styles.itemText}>Language: {user.language || 'English'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.item} onPress={() => handleNavigation('Security')}>
           <Ionicons name="shield-outline" size={24} color="black" />
@@ -83,10 +120,25 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e6e6e6',
   },
-  avatar: {
+  profileHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center', // Centrer le contenu horizontalement
+    width: '100%',
+  },
+  profilePicture: {
     width: 100,
     height: 100,
     borderRadius: 50,
+    alignSelf: 'center', // Centrer l'image horizontalement
+    marginVertical: 20,
+  },
+  editProfileButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 6,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    alignSelf: 'flex-end',
   },
   name: {
     fontSize: 22,
@@ -120,18 +172,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
   },
-  
   item: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#e6e6e6',
-  },
-  profilePicture: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
   },
   itemText: {
     marginLeft: 10,

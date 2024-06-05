@@ -23,7 +23,7 @@ const HomeScreen = () => {
       const token = await AsyncStorage.getItem('userToken');
       if (token) {
         try {
-          const response = await axios.get('http://172.16.0.219:8080/api/v1/profile', {
+          const response = await axios.get('http://192.168.137.232:8080/api/v1/profile', {
             headers: {
               Authorization: `Bearer ${token}`
             }

@@ -21,7 +21,7 @@ const RegistrationScreen = ({ navigation }) => {
     }
 
     try {
-      const response = await axios.post('http://172.16.0.219:8080/api/v1/auth/register', {
+      const response = await axios.post('http://192.168.137.232:8080/api/v1/auth/register', {
         fullName: name,
         email: email,
         phoneNumber: phone,

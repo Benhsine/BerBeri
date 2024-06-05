@@ -1,21 +1,93 @@
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Button, StyleSheet, ActivityIndicator } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-const EditProfileScreen = ({ navigation }) => {
-  const [name, setName] = useState('John Daniel');
-  const [nickname, setNickname] = useState('puerto_rico');
-  const [email, setEmail] = useState('youremail@domain.com');
-  const [phone, setPhone] = useState('123-456-7890');
-  const [address, setAddress] = useState('RABAT');
+const EditProfileScreen = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [loading, setLoading] = useState(true);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        try {
+          const response = await axios.get('http://192.168.137.232:8080/api/v1/profile', {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          const userData = response.data;
+          setName(userData.fullName);
+          setEmail(userData.email);
+          setPhone(userData.phoneNumber);
+          setLoading(false);
+        } catch (error) {
+          console.error(error);
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
+  const handleSubmit = async () => {
+    const token = await AsyncStorage.getItem('userToken');
+    if (token) {
+      try {
+        await axios.put('http://localhost:8080/api/v1/profile/update', {
+          fullName: name,
+          newEmail: email,
+          phoneNumber: phone
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        navigation.navigate('Profile'); // Go back to the previous screen
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  
+  if (loading) {
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator size="large" color="#0000ff" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
-      <TextInput style={styles.input} value={name} onChangeText={setName} placeholder="Full Name" />
-      <TextInput style={styles.input} value={nickname} onChangeText={setNickname} placeholder="Nickname" />
-      <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="Email" keyboardType="email-address" />
-      <TextInput style={styles.input} value={phone} onChangeText={setPhone} placeholder="Phone Number" keyboardType="phone-pad" />
-      <TextInput style={styles.input} value={address} onChangeText={setAddress} placeholder="Address" />
-      <Button title="Submit" onPress={() => navigation.goBack()} />
+      <TextInput
+        style={styles.input}
+        value={name}
+        onChangeText={setName}
+        placeholder="Full Name"
+      />
+      <TextInput
+        style={styles.input}
+        value={email}
+        onChangeText={setEmail}
+        placeholder="Email"
+        keyboardType="email-address"
+      />
+      <TextInput
+        style={styles.input}
+        value={phone}
+        onChangeText={setPhone}
+        placeholder="Phone Number"
+        keyboardType="phone-pad"
+      />
+      <Button title="Submit" onPress={handleSubmit} />
     </View>
   );
 };
@@ -36,3 +108,4 @@ const styles = StyleSheet.create({
 });
 
 export default EditProfileScreen;
+
