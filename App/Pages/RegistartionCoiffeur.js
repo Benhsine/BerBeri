@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Dimensions } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 
-const RegistrationCoiffeurScreen = ({ navigation }) => {
+const RegistrationCoiffeurScreen = () => {
+  const navigation = useNavigation();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -14,7 +16,7 @@ const RegistrationCoiffeurScreen = ({ navigation }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.headerText}>coiffeur</Text>
+      <Text style={styles.headerText}>Coiffeur</Text>
       
       <Text style={styles.label}>Your name</Text>
       <TextInput
