@@ -1,73 +1,47 @@
-import React, { useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, FlatList, ImageBackground, StyleSheet, Dimensions} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useNavigation } from '@react-navigation/native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Switch, ScrollView } from 'react-native';
 
-const OnboardingScreen = () => {
-  const navigation = useNavigation();
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const flatListRef = useRef(null);
-  const pages = [
-    { key: '1', title: 'Find inspiration. Get Haircut. Book today.', image: require('./../Assets/Images/background1.jpg') },
-    { key: '2', title: 'Discover new styles. Stay trendy.', image: require('./../Assets/Images/background2.jpg') },
-    { key: '3', title: 'Book easily. Look great.', image: require('./../Assets/Images/background3.jpg') },
-  ];
+const NotificationsScreen = () => {
+  const [notifications, setNotifications] = useState({
+    email: true,
+    sms: false,
+    push: true,
+  });
 
-  const onNext = async () => {
-    if (currentIndex < pages.length - 1) {
-      flatListRef.current.scrollToIndex({ index: currentIndex + 1 });
-      setCurrentIndex(currentIndex + 1);
-    } else {
-      await AsyncStorage.setItem('hasSeenOnboarding', 'true');
-      navigation.navigate('LoginScreen');
-    }
+  const handleToggle = (type) => {
+    setNotifications((prevNotifications) => ({
+      ...prevNotifications,
+      [type]: !prevNotifications[type],
+    }));
   };
-
-  const onBack = () => {
-    if (currentIndex > 0) {
-      flatListRef.current.scrollToIndex({ index: currentIndex - 1 });
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  const renderItem = ({ item }) => (
-    <ImageBackground source={item.image} style={styles.background} resizeMode="cover">
-      <View style={styles.overlay}>
-        <Text style={styles.title}>{item.title}</Text>
-        <View style={styles.buttonContainer}>
-          {currentIndex > 0 && (
-            <TouchableOpacity style={styles.button} onPress={onBack}>
-              <Text style={styles.buttonText}>Back</Text>
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity style={styles.button} onPress={onNext}>
-            <Text style={styles.buttonText}>{currentIndex === pages.length - 1 ? 'Finish' : 'Next'}</Text>
-          </TouchableOpacity>
-        </View>
-        <View style={styles.pagination}>
-          {pages.map((_, index) => (
-            <View key={index} style={index === currentIndex ? styles.activeDot : styles.dot} />
-          ))}
-        </View>
-      </View>
-    </ImageBackground>
-  );
 
   return (
-    <FlatList
-      data={pages}
-      renderItem={renderItem}
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      keyExtractor={(item) => item.key}
-      ref={flatListRef}
-      scrollEnabled={false}
-    />
+    <ScrollView style={styles.container}>
+      <View style={styles.item}>
+        <Text style={styles.itemText}>Email Notifications</Text>
+        <Switch
+          value={notifications.email}
+          onValueChange={() => handleToggle('email')}
+        />
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.itemText}>SMS Notifications</Text>
+        <Switch
+          value={notifications.sms}
+          onValueChange={() => handleToggle('sms')}
+        />
+      </View>
+      <View style={styles.item}>
+        <Text style={styles.itemText}>Push Notifications</Text>
+        <Switch
+          value={notifications.push}
+          onValueChange={() => handleToggle('push')}
+        />
+      </View>
+    </ScrollView>
   );
 };
 
-const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
     background: { width, height },
     overlay: {
@@ -123,4 +97,4 @@ const styles = StyleSheet.create({
   });
   
 
-export default OnboardingScreen;
+export default NotificationsScreen;

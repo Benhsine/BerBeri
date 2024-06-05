@@ -1,35 +1,8 @@
-// App/Pages/ProfileScreen.js
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { useNavigation } from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import axios from 'axios';
 
-const ProfileScreen = () => {
-  const [user, setUser] = useState(null);
-  const navigation = useNavigation();
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const token = await AsyncStorage.getItem('userToken');
-      if (token) {
-        try {
-          const response = await axios.get('http://192.168.137.232:8080/api/v1/profile', {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          setUser(response.data);
-        } catch (error) {
-          console.error(error);
-        }
-      }
-    };
-
-    fetchProfile();
-  }, []);
-
+const ProfileScreen = ({ navigation }) => {
   const handleEditProfile = () => {
     navigation.navigate('EditProfile');
   };
@@ -38,29 +11,16 @@ const ProfileScreen = () => {
     navigation.navigate(screen);
   };
 
-  if (!user) {
-    return (
-      <View style={styles.container}>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
         <View style={styles.profileHeader}>
-          <Image
-            source={user.profilePicture ? { uri: user.profilePicture } : require('../Assets/Images/user-profile.jpg')}
-            style={styles.profilePicture}
-          />
-          
+          <Image source={require('../assets/profile_picture.png')} style={styles.profilePicture} />
+          <Text style={styles.profileName}>John Daniel</Text>
+          <TouchableOpacity style={styles.editProfileButton} onPress={handleEditProfile}>
+            <Text style={{ color: 'white' }}>Edit Profile</Text>
+          </TouchableOpacity>
         </View>
-        <Text style={styles.name}>{user.fullName}</Text>
-        <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
-          <Text style={styles.editButtonText}>Edit Profile</Text>
-        </TouchableOpacity>
       </View>
       <View style={styles.tabs}>
         <TouchableOpacity style={styles.tab}>
@@ -81,7 +41,7 @@ const ProfileScreen = () => {
         </TouchableOpacity>
         <TouchableOpacity style={styles.item} onPress={() => handleNavigation('Language')}>
           <Ionicons name="language-outline" size={24} color="black" />
-          <Text style={styles.itemText}>Language: {user.language || 'English'}</Text>
+          <Text style={styles.itemText}>Language: English</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.item} onPress={() => handleNavigation('Security')}>
           <Ionicons name="shield-outline" size={24} color="black" />
@@ -121,56 +81,43 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e6e6e6',
   },
   profileHeader: {
-    flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center', // Centrer le contenu horizontalement
-    width: '100%',
   },
   profilePicture: {
-    width: 100,
     height: 100,
-    borderRadius: 50,
-    alignSelf: 'center', // Centrer l'image horizontalement
-    marginVertical: 20,
+    width: 200,
+    borderRadius: 50, // Adjust the borderRadius to make it circular
   },
-  editProfileButton: {
-    backgroundColor: '#007bff',
-    paddingVertical: 6,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    alignSelf: 'flex-end',
-  },
-  name: {
+  profileName: {
     fontSize: 22,
     fontWeight: 'bold',
     marginVertical: 10,
   },
-  editButton: {
+  editProfileButton: {
     backgroundColor: '#007bff',
-    paddingVertical: 6,
+    paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 5,
-  },
-  editButtonText: {
-    color: '#fff',
-    fontSize: 16,
   },
   tabs: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginVertical: 10,
+    marginVerticalmarginVertical: 20,
   },
   tab: {
     marginHorizontal: 10,
+    borderBottomWidth: 2,
+    borderBottomColor: '#007bff',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
   tabText: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#007bff',
   },
   body: {
     paddingHorizontal: 20,
-    paddingVertical: 10,
   },
   item: {
     flexDirection: 'row',
@@ -180,8 +127,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#e6e6e6',
   },
   itemText: {
-    marginLeft: 10,
-    fontSize: 18,
+    marginLeft: 15,
+    fontSize: 16,
   },
 });
 

@@ -29,6 +29,7 @@ import ContactUsScreen from '../App/Pages/ContactUsScreen';
 import PrivacyPolicyScreen from '../App/Pages/PrivacyPolicyScreen';
 import LanguageScreen from '../App/Pages/LanguageScreen'; 
 
+
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
